@@ -10,13 +10,15 @@ export const resolvers = {
       await student.save();
       return student;
     },
-    removeStudent:  async(_, { empid }) => {
-      const removedStudent= await Student.deleteMany({empid:empid});
-      return {count:removedStudent.deletedCount,empid:empid};
+    removeStudent:  async(_, { age }) => {
+      const removedStudent= await Student.deleteMany({age:{$gte:age}});
+      return {count:removedStudent.deletedCount,age:age};
     },
-    updateStudent: async(_,{empid,name})=>{
-      const updatedStudent = await Student.updateMany({empid:empid},{empid:empid,name:name})
-      return {count:updatedStudent.nModified,empid:empid,name:name};
+    // updateMany has 4 params filter, update, options, callback
+    updateStudent: async(_,{empid,student})=>{
+      const updatedStudent = await Student.updateMany({empid:empid},
+        {empid:student.empid,name:student.name,age:student.age})
+      return {count:updatedStudent.nModified,empid:student.empid,name:student.name,age:student.age};
      }
   }
 };

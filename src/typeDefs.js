@@ -2,21 +2,26 @@ import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
   type Query {
-    hello: String
-    students: [Student]
+    students: [Response]
   }
   type Student {
     empid: String
     name: String
   }
+  input StudentInput {
+    empid: String
+    name: String
+    age: Int
+  }
   type Response{
     count: Int
     empid:String
     name:String
+    age : Int
   }
   type Mutation {
     createStudent(empid: String, name: String): Student
-    removeStudent(empid: String): Response
-    updateStudent(empid: String, name: String): Response
+    removeStudent(age: Int): Response
+    updateStudent(empid: String, student: StudentInput): Response
   }
 `;
