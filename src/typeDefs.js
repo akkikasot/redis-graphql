@@ -9,9 +9,14 @@ export const typeDefs = gql`
     empid: String
     name: String
   }
+  type Response{
+    count: Int
+    empid:String
+    name:String
+  }
   type Mutation {
     createStudent(empid: String, name: String): Student
-    removeStudent(empid: String): Int
-    updateStudent(empid: String, name: String): Student
+    removeStudent(empid: String): Response
+    updateStudent(empid: String, name: String): Response
   }
 `;

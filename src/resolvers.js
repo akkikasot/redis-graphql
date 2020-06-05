@@ -12,11 +12,11 @@ export const resolvers = {
     },
     removeStudent:  async(_, { empid }) => {
       const removedStudent= await Student.deleteMany({empid:empid});
-      return removedStudent.deletedCount;
+      return {count:removedStudent.deletedCount,empid:empid};
     },
     updateStudent: async(_,{empid,name})=>{
       const updatedStudent = await Student.updateMany({empid:empid},{empid:empid,name:name})
-      return updatedStudent;
+      return {count:updatedStudent.nModified,empid:empid,name:name};
      }
   }
 };
