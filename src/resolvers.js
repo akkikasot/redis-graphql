@@ -1,24 +1,35 @@
-import { Student } from "./models/Student";
+
 
 export const resolvers = {
   Query: {
-    students: () => Student.find()
+    get: async (_, { key }, {client}) => {
+      try{
+
+       return {key:key,value:client.getAsync(key)};
+       
+      }catch(e){
+        return null;
+      }
+    }
   },
   Mutation: {
-    createStudent: async (_, { empid, name }) => {
-      const student= new Student({empid:empid, name:name});
-      await student.save();
-      return student;
+    set: async (_, { key, value }, {client}) => {
+      try{
+       await client.set(key, value);
+       return {key:key,value:value};
+      }catch(e){
+        console.log(e);
+        return false;
+      }
     },
-    removeStudent:  async(_, { age }) => {
-      const removedStudent= await Student.deleteMany({age:{$gte:age}});
-      return {count:removedStudent.deletedCount,age:age};
-    },
-    // updateMany has 4 params filter, update, options, callback
-    updateStudent: async(_,{empid,student})=>{
-      const updatedStudent = await Student.updateMany({empid:empid},
-        {empid:student.empid,name:student.name,age:student.age})
-      return {count:updatedStudent.nModified,empid:student.empid,name:student.name,age:student.age};
-     }
-  }
+    delete:  async (_, { key }, {client}) => {
+      try{
+       await client.del(key);
+       return true;
+      }catch(e){
+        console.log(e);
+        return false;
+      }
+    }
+   }
 };
